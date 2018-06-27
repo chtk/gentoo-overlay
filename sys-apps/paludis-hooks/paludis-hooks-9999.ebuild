@@ -21,6 +21,8 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~sparc ~x86"
 
 COMMON_DEPEND="sys-apps/paludis[python,${PYTHON_USEDEP}]"
 
+PALUDIS_CONFIG_DIR="/etc/paludis"
+
 DEPEND="${COMMON_DEPEND} >=dev-util/cmake-3.4 sys-apps/util-linux"
 RDEPEND="${PYTHON_DEPS}
     ${COMMON_DEPEND}
@@ -60,29 +62,27 @@ src_install() {
 
 	if use autopatch; then
 		local -r auto_patch="${EPREFIX}"/usr/share/${PN}/auto-patch.bash
-		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_compile_pre
-		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_compile_post
-		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_configure_post
-		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_configure_pre
-		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_install_pre
-		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_unpack_post
-		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/install_all_post
+		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_compile_pre/auto-patch.bash
+		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_compile_post/auto-patch.bash
+		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_configure_post/auto-patch.bash
+		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_configure_pre/auto-patch.bash
+		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_install_pre/auto-patch.bash
+		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_unpack_post/auto-patch.bash
+		dosym "${auto_patch}" "${PALUDIS_CONFIG_DIR}"/hooks/install_all_post/auto-patch.bash
 	fi
 
 	if use fs-manager; then
 		local -r filesystem_manager="${EPREFIX}"/usr/share/${PN}/filesystem-manager.bash
-		dosym "${filesystem_manager}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_install_post
+		dosym "${filesystem_manager}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_install_post/filesystem_manager.bash
 	fi
 
 	if use workdir-tmpfs; then
 		local -r workdir_tmpfs="${EPREFIX}"/usr/share/${PN}/workdir-tmpfs.bash
-		dosym "${workdir_tmpfs}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_init_post
-		dosym "${workdir_tmpfs}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_tidyup_post
-		dosym "${workdir_tmpfs}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_tidyup_pre
-		dosym "${workdir_tmpfs}" "${PALUDIS_CONFIG_DIR}"/hooks/install_fail
+		dosym "${workdir_tmpfs}" /"${PALUDIS_CONFIG_DIR}"/hooks/ebuild_init_post/workdir-tmpfs.bash
+		dosym "${workdir_tmpfs}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_tidyup_post/workdir-tmpfs.bash
+		dosym "${workdir_tmpfs}" "${PALUDIS_CONFIG_DIR}"/hooks/ebuild_tidyup_pre/workdir-tmpfs.bash
+		dosym "${workdir_tmpfs}" "${PALUDIS_CONFIG_DIR}"/hooks/install_fail/workdir-tmpfs.bash
 	fi
-
-	python_fix_shebang "${D}"/usr/libexec/cave/commands/print-ebuild-path
 }
 
 pkg_postinst() {
